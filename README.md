@@ -1,8 +1,8 @@
 # ToDoList
 Todo-list app called ‘List’
-!(naam1.png)
-!(naam2.png)
-!(naam3.png)
-!(naam4.png)
-!(naam5.png)
-!(naam6.png)
+![screen1](naam1.png)
+![screen2](naam2.png)
+![screen3](naam3.png)
+![screen4](naam4.png)
+![screen5](naam5.png)
+![screen6](naam6.png)
