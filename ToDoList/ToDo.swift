@@ -15,6 +15,7 @@ struct ToDo: Codable
     var dueDate: Date
     var notes: String?
     
+    // sets up due date format
     static let dueDateFormatter: DateFormatter =
     {
         let formatter = DateFormatter()
@@ -23,6 +24,7 @@ struct ToDo: Codable
         return formatter
     }()
     
+    // loads the to do's
     static func loadToDos() -> [ToDo]?
     {
         guard let codedToDos = try? Data(contentsOf: ArchiveURL)
@@ -31,6 +33,7 @@ struct ToDo: Codable
         return try? propertyListDecoder.decode(Array<ToDo>.self, from: codedToDos)
     }
     
+    // samples from beginning of the project
     static func loadSampleToDos() -> [ToDo]
     {
         let todo1 = ToDo(title: "Cooking", isComplete: false, dueDate: Date(), notes: "Cook some psaghetti")
@@ -40,6 +43,7 @@ struct ToDo: Codable
         return [todo1, todo2, todo3]
     }
     
+    // saves the to do's
     static func saveToDos(_ todos: [ToDo])
     {
         let propertyListEncoder = PropertyListEncoder()

@@ -10,6 +10,7 @@ import UIKit
 
 class ToDoViewController: UITableViewController
 {
+    // defining outlets
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var isCompleteButton: UIButton!
     @IBOutlet weak var dueDateLabel: UILabel!
@@ -37,9 +38,11 @@ class ToDoViewController: UITableViewController
         updateDueDateLabel(date: dueDatePickerView.date)
     }
     
+    // defining variables
     var isEndDatePickerHidden = true
     var todo: ToDo?
     
+    // loads initial screen
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -62,6 +65,7 @@ class ToDoViewController: UITableViewController
         updateDueDateLabel(date: dueDatePickerView.date)
     }
     
+    // sets the style of the rows
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         let normalCellHeight = CGFloat(44)
@@ -79,6 +83,7 @@ class ToDoViewController: UITableViewController
         }
     }
     
+    // hides and shows the date picker once it's clicked
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         switch (indexPath)
@@ -96,6 +101,7 @@ class ToDoViewController: UITableViewController
         }
     }
     
+    // if there is something in the textfield, the save button is available
     func updateSaveButtonState()
     {
         let text = titleTextField.text ?? ""

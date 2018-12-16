@@ -8,8 +8,44 @@
 
 import UIKit
 
-class ToDoTableViewController: UITableViewController, ToDoCellDelegate
+class ToDoTableViewController: UITableViewController, ToDoCellDelegate, UISearchBarDelegate
 {
+    // defining outlet
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    // defining variable
+    var todos = [ToDo]()
+    var CurrentTodos = [ToDo]()
+    
+    // defining delegate
+    private func SearchBar ()
+    {
+        searchBar.delegate = self
+    }
+    
+    // function that searches your letter/word
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
+    {
+        guard !searchText.isEmpty else
+        {
+            todos = CurrentTodos
+            tableView.reloadData()
+            return
+        }
+        todos = CurrentTodos.filter({ (ToDo) -> Bool in
+            ToDo.title.lowercased().contains(searchText.lowercased())
+        })
+        tableView.reloadData()
+    }
+    
+    // function that saves the todos you already have so that if you
+    // close the searchbar all the todos are still there
+    func Copy()
+    {
+        CurrentTodos = todos
+    }
+    
+    // checks if the chechmark is tapped
     func checkmarkTapped(sender: ToDoCell)
     {
         if let indexPath = tableView.indexPath(for: sender)
@@ -21,6 +57,7 @@ class ToDoTableViewController: UITableViewController, ToDoCellDelegate
         }
     }
     
+    // saves the new to do and goes to the new list
     @IBAction func unwindToToDoList(segue: UIStoryboardSegue)
     {
         guard segue.identifier == "saveUnwind" else { return }
@@ -40,16 +77,17 @@ class ToDoTableViewController: UITableViewController, ToDoCellDelegate
                 tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
         }
+        Copy()
         ToDo.saveToDos(todos)
     }
     
-    var todos = [ToDo]()
-    
+    // determines the amount of rows needed
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return todos.count
     }
     
+    // fills in the cells with the information given
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCellIdentifier") as? ToDoCell
@@ -64,6 +102,7 @@ class ToDoTableViewController: UITableViewController, ToDoCellDelegate
         return cell
     }
     
+    // Loads the screen by adding all the todos
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -78,13 +117,16 @@ class ToDoTableViewController: UITableViewController, ToDoCellDelegate
         {
             todos = ToDo.loadSampleToDos()
         }
+        Copy()
     }
     
+    // enables editing
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
     {
         return true
     }
     
+    // enables removing todos
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
     {
         if editingStyle == .delete
@@ -95,6 +137,7 @@ class ToDoTableViewController: UITableViewController, ToDoCellDelegate
         }
     }
     
+    // send all the info of your todo to the show list
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         if segue.identifier == "showDetails"
